@@ -368,11 +368,8 @@ export default function EndingScreen() {
           <>
             <div className="text-left space-y-2 mb-8">
               {storyData.map((line, i) => (
-                <motion.div
+                <div
                   key={i}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: i * 0.05 }}
                   className={`${
                     line.startsWith('═══') 
                       ? 'text-cyan-400 text-center'
@@ -384,7 +381,7 @@ export default function EndingScreen() {
                   }`}
                 >
                   {line}
-                </motion.div>
+                </div>
               ))}
             </div>
             
