@@ -16,6 +16,7 @@ declare module 'react-draggable' {
     disabled?: boolean;
     handle?: string;
     cancel?: string;
+    nodeRef?: React.RefObject<HTMLElement | null>;
     children?: React.ReactNode;
   }
 

@@ -24,7 +24,7 @@ export default function Window({
   forceOpen = false,
   windowId,
 }: WindowProps) {
-  const nodeRef = useRef(null);
+  const nodeRef = useRef<HTMLDivElement>(null);
   const { activeWindow, setActiveWindow } = useGameStore();
   const isActive = activeWindow === windowId;
 
