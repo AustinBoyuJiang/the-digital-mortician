@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useGameStore, Ending } from '@/lib/game-store';
 import { useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const endings: Record<
@@ -330,7 +331,7 @@ export default function EndingScreen() {
   };
 
   if (showFullStory) {
-    return (
+    return createPortal(
       <div
         ref={screenRef}
         className={`fixed inset-0 ${endingData.bg} ${endingData.text} flex items-start justify-center z-[300] font-mono overflow-auto`}
@@ -371,7 +372,8 @@ export default function EndingScreen() {
             </button>
           </div>
         </div>
-      </div>
+      </div>,
+      document.body
     );
   }
 
