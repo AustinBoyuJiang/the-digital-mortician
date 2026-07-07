@@ -35,7 +35,6 @@ export default function Home() {
   const [toastMessage, setToastMessage] = useState('');
   const [toastFrom, setToastFrom] = useState('');
   const [showError, setShowError] = useState(false);
-  const shouldGlitch = isGlitching && gameStage !== 4;
 
   useEffect(() => {
     if (gameStage === 0) {
@@ -61,12 +60,6 @@ export default function Home() {
       }, 1000);
     }
   }, [gameStage, setGlitching, openWindow]);
-
-  useEffect(() => {
-    if (gameStage === 4) {
-      setGlitching(false);
-    }
-  }, [gameStage, setGlitching]);
 
   const handleDragStart = (item: string) => {
     setDraggedItem(item);
@@ -119,7 +112,7 @@ export default function Home() {
       
       <motion.div
         animate={
-          shouldGlitch
+          isGlitching
             ? {
                 x: [0, -2, 2, -2, 0],
                 filter: [
@@ -131,7 +124,7 @@ export default function Home() {
               }
             : {}
         }
-        transition={{ repeat: shouldGlitch ? Infinity : 0, duration: 0.3 }}
+        transition={{ repeat: isGlitching ? Infinity : 0, duration: 0.3 }}
         className="w-full h-full"
       >
         <div className="p-8 grid grid-cols-6 gap-6">

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useGameStore, Ending } from '@/lib/game-store';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const endings: Record<
@@ -314,18 +314,28 @@ const fullStory: Record<Exclude<Ending, null>, string[]> = {
 export default function EndingScreen() {
   const { gameStage, ending } = useGameStore();
   const [showFullStory, setShowFullStory] = useState(false);
+  const screenRef = useRef<HTMLDivElement>(null);
 
   if (gameStage !== 4 || !ending) return null;
 
   const endingData = endings[ending];
   const storyData = fullStory[ending];
 
-  return (
-    <div
-      className={`fixed inset-0 ${endingData.bg} ${endingData.text} flex items-center justify-center z-[300] font-mono overflow-auto`}
-    >
-      {showFullStory ? (
-        <div className="max-w-3xl px-8 py-12 max-h-screen overflow-y-auto">
+  const handleBackToSummary = () => {
+    setShowFullStory(false);
+    requestAnimationFrame(() => {
+      screenRef.current?.scrollTo({ top: 0, left: 0 });
+      window.scrollTo({ top: 0, left: 0 });
+    });
+  };
+
+  if (showFullStory) {
+    return (
+      <div
+        ref={screenRef}
+        className={`fixed inset-0 ${endingData.bg} ${endingData.text} flex items-start justify-center z-[300] font-mono overflow-auto`}
+      >
+        <div className="max-w-3xl px-8 py-12">
           <div className="text-left space-y-2 mb-8">
             {storyData.map((line, i) => (
               <div
@@ -347,7 +357,7 @@ export default function EndingScreen() {
 
           <div className="flex flex-col gap-3">
             <button
-              onClick={() => setShowFullStory(false)}
+              onClick={handleBackToSummary}
               className="px-6 py-3 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition-colors flex items-center justify-center gap-2"
             >
               <ChevronUp size={20} />
@@ -361,44 +371,53 @@ export default function EndingScreen() {
             </button>
           </div>
         </div>
-      ) : (
-        <div className="text-center max-w-3xl px-8 py-12 max-h-screen overflow-y-auto">
-          {endingData.message.map((line, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: i * 0.2 }}
-              className={`${line === '' ? 'mb-2' : 'mb-3'} ${
-                i === 0 ? 'text-3xl font-bold mb-6' : 'text-base leading-relaxed'
-              }`}
-            >
-              {line}
-            </motion.div>
-          ))}
+      </div>
+    );
+  }
 
+  return (
+    <motion.div
+      ref={screenRef}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className={`fixed inset-0 ${endingData.bg} ${endingData.text} flex items-center justify-center z-[300] font-mono overflow-auto`}
+    >
+      <div className="text-center max-w-3xl px-8 py-12 max-h-screen overflow-y-auto">
+        {endingData.message.map((line, i) => (
           <motion.div
+            key={i}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: endingData.message.length * 0.2 }}
-            className="flex flex-col gap-3 mt-8"
+            transition={{ delay: i * 0.2 }}
+            className={`${line === '' ? 'mb-2' : 'mb-3'} ${
+              i === 0 ? 'text-3xl font-bold mb-6' : 'text-base leading-relaxed'
+            }`}
           >
-            <button
-              onClick={() => setShowFullStory(true)}
-              className="px-6 py-3 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition-colors flex items-center justify-center gap-2"
-            >
-              <span>📖 READ THE FULL STORY</span>
-              <ChevronDown size={20} />
-            </button>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-zinc-800 text-white rounded hover:bg-zinc-700 transition-colors"
-            >
-              🔄 RESTART GAME
-            </button>
+            {line}
           </motion.div>
-        </div>
-      )}
-    </div>
+        ))}
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: endingData.message.length * 0.2 }}
+          className="flex flex-col gap-3 mt-8"
+        >
+          <button
+            onClick={() => setShowFullStory(true)}
+            className="px-6 py-3 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition-colors flex items-center justify-center gap-2"
+          >
+            <span>📖 READ THE FULL STORY</span>
+            <ChevronDown size={20} />
+          </button>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 bg-zinc-800 text-white rounded hover:bg-zinc-700 transition-colors"
+          >
+            🔄 RESTART GAME
+          </button>
+        </motion.div>
+      </div>
+    </motion.div>
   );
 }
