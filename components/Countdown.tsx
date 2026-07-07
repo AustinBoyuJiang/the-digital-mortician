@@ -27,9 +27,9 @@ export default function Countdown() {
 
   return (
     <motion.div
-      initial={{ y: -50 }}
-      animate={{ y: 0 }}
-      className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white font-mono text-xl px-6 py-3 rounded-lg shadow-2xl z-50 border-2 border-red-400"
+      initial={{ y: -50, scale: 0.9 }}
+      animate={{ y: 0, scale: 1 }}
+      className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white font-mono text-xl px-8 py-4 rounded-lg shadow-2xl z-[200] border-2 border-red-400 flicker"
     >
       MANDATORY WIPE IN: {countdown}s
     </motion.div>

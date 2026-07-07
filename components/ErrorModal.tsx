@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { AlertTriangle } from 'lucide-react';
+import { audioManager } from '@/lib/audio-manager';
 
 interface ErrorModalProps {
   show: boolean;
@@ -16,7 +17,7 @@ export default function ErrorModal({ show, onClose }: ErrorModalProps) {
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-red-950 border-4 border-red-600 rounded-lg p-8 max-w-md"
+        className="bg-red-950/95 backdrop-blur-md border-4 border-red-600 rounded-lg p-8 max-w-md shadow-2xl shadow-red-900/50"
       >
         <div className="flex items-center gap-4 mb-4">
           <AlertTriangle size={48} className="text-red-500" />
@@ -37,7 +38,10 @@ export default function ErrorModal({ show, onClose }: ErrorModalProps) {
           Contact System Administrator.
         </div>
         <button
-          onClick={onClose}
+          onClick={() => {
+            audioManager.playClick();
+            onClose();
+          }}
           className="w-full bg-red-600 hover:bg-red-700 text-white font-mono py-2 px-4 rounded"
         >
           ACKNOWLEDGE

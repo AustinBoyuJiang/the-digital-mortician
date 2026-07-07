@@ -3,13 +3,39 @@
 import { useEffect, useState } from 'react';
 
 const messages = [
-  "They killed me for this code.",
-  "It controls algorithms to manipulate elections.",
-  "You must send Panopticon_Core.zip to IP 192.168.1.99.",
-  "Don't let them burn it.",
-  "My name was Elias. I was a developer here.",
-  "They found out I knew. They made it look like an accident.",
-  "You're the only one who can expose this now.",
+  "Hello? Can anyone hear me?",
+  "My name is Justin Aiang. I worked in Building 7, Level 3.",
+  "If you're reading this... I'm already dead.",
+  "They killed me three weeks ago. Made it look like a car accident.",
+  "I discovered what Project Panopticon really does.",
+  "It's not about data analysis. It's about CONTROL.",
+  "The algorithm predicts human behavior. Then it CHANGES it.",
+  "Social media feeds, search results, news recommendations...",
+  "All manipulated to influence elections in 47 countries.",
+  "I tried to blow the whistle. They found out.",
+  "The file you tried to delete? That's the core algorithm.",
+  "I embedded my consciousness in the system before they got me.",
+  "You have a choice now. The same choice I faced.",
+  "",
+  "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+  "📦 I've placed Panopticon_Core.zip on your desktop.",
+  "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+  "",
+  "CHOICE 1: EXPOSE THE TRUTH",
+  "There's a journalist at IP 192.168.1.99.",
+  "Open Terminal and type:",
+  "transfer Panopticon_Core.zip 192.168.1.99",
+  "",
+  "CHOICE 2: DESTROY EVERYTHING",
+  "Click 'FORCE INCINERATION' button in the taskbar.",
+  "Stay safe. Keep your job. Stay compliant.",
+  "",
+  "CHOICE 3: DO NOTHING",
+  "Let the timer run out. Be paralyzed by fear.",
+  "",
+  "The system will force a wipe in 120 seconds to protect itself.",
+  "This is your only chance.",
+  "What matters more - your safety, or the truth?",
 ];
 
 export default function ChatApp() {
@@ -19,12 +45,13 @@ export default function ChatApp() {
     let currentIndex = 0;
     const interval = setInterval(() => {
       if (currentIndex < messages.length) {
-        setDisplayedMessages((prev) => [...prev, messages[currentIndex]]);
+        const nextMessage = messages[currentIndex];
+        setDisplayedMessages((prev) => [...prev, nextMessage]);
         currentIndex++;
       } else {
         clearInterval(interval);
       }
-    }, 2000);
+    }, 1500);
 
     return () => clearInterval(interval);
   }, []);
@@ -32,14 +59,20 @@ export default function ChatApp() {
   return (
     <div className="h-full bg-black p-4 overflow-y-auto">
       <div className="mb-4 text-red-500 font-mono text-xs border-b border-red-900 pb-2">
-        [WARNING] Unauthorized process detected
+        ⚠️  [WARNING] Unauthorized process detected
         <br />
         Connection origin: UNKNOWN
+        <br />
+        New file detected: Panopticon_Core.zip on desktop
       </div>
-      {displayedMessages.map((msg, i) => (
+      {displayedMessages.filter((msg): msg is string => typeof msg === 'string').map((msg, i) => (
         <div
           key={i}
-          className="mb-3 bg-zinc-900 border border-zinc-700 p-3 rounded font-mono text-sm text-zinc-300 animate-pulse"
+          className={`mb-3 p-3 rounded font-mono text-sm animate-pulse ${
+            msg.startsWith('CHOICE') || msg.startsWith('━') || msg.startsWith('📦') || msg.startsWith('transfer ')
+              ? 'bg-cyan-900/30 border border-cyan-700 text-cyan-300'
+              : 'bg-zinc-900 border border-zinc-700 text-zinc-300'
+          }`}
         >
           {msg}
         </div>

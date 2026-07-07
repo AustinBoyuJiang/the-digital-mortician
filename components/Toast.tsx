@@ -23,10 +23,10 @@ export default function Toast({ message, from, show, onClose }: ToastProps) {
     <AnimatePresence>
       {show && (
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="fixed top-4 right-4 bg-zinc-900 border border-cyan-500 rounded-lg shadow-2xl p-4 max-w-md z-50"
+          initial={{ opacity: 0, y: -20, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -20, scale: 0.9 }}
+          className="fixed top-20 right-4 bg-zinc-900/95 backdrop-blur-md border border-cyan-500/50 rounded-lg shadow-2xl p-4 max-w-md z-40 window-glow"
         >
           <div className="flex items-start justify-between">
             <div>
