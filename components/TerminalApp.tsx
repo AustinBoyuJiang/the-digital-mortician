@@ -134,7 +134,11 @@ export default function TerminalApp() {
         '─────────────────────────────────────',
         '',
         '  Personal_Photos/       [DELETED]',
-        gameStage >= 1 ? '  Q3_Financials.enc      🔒 [LOCKED - needs password]' : '',
+        gameStage >= 3
+          ? '  Q3_Financials.enc      🔓 [DECRYPTED]'
+          : gameStage >= 1
+            ? '  Q3_Financials.enc      🔒 [LOCKED - needs password]'
+            : '',
         gameStage >= 3 ? '  Panopticon_Core.zip    [DECRYPTED - ready to transfer]' : '',
         '',
         gameStage < 3 ? '💡 TIP: Use "decrypt Q3_Financials" to unlock' : '',

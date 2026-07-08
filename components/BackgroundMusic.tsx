@@ -1,33 +1,39 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Volume2, VolumeX, Play } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { Volume2, VolumeX } from 'lucide-react';
 import { audioManager } from '@/lib/audio-manager';
+import { useGameStore } from '@/lib/game-store';
 
 export default function BackgroundMusic() {
   const [isMuted, setIsMuted] = useState(false);
-  const [isReady, setIsReady] = useState(false);
-  const [showPlayButton, setShowPlayButton] = useState(true);
+  const [isReady, setIsReady] = useState(true);
+  const { gameStage, ending } = useGameStore();
 
-  const startMusic = async () => {
-    await audioManager.playBGMusic();
+  const startMusic = useCallback(async () => {
+    const started =
+      gameStage === 4 && ending
+        ? await audioManager.playEndingMusic()
+        : await audioManager.playBGMusic();
     setIsReady(true);
-    setShowPlayButton(false);
-  };
+    return started;
+  }, [gameStage, ending]);
 
   useEffect(() => {
-    const handleFirstInteraction = async () => {
-      if (!isReady) {
-        await startMusic();
-      }
+    startMusic();
+
+    const resumeMusic = () => {
+      startMusic();
     };
 
-    document.addEventListener('click', handleFirstInteraction, { once: true });
-    
+    document.addEventListener('pointerdown', resumeMusic, { once: true });
+    document.addEventListener('keydown', resumeMusic, { once: true });
+
     return () => {
-      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('pointerdown', resumeMusic);
+      document.removeEventListener('keydown', resumeMusic);
     };
-  }, [isReady]);
+  }, [startMusic]);
 
   const toggleMute = () => {
     const newMuteState = audioManager.toggleMute();
@@ -35,23 +41,8 @@ export default function BackgroundMusic() {
     audioManager.playClick();
   };
 
-  const handleManualStart = async () => {
-    await startMusic();
-    audioManager.playClick();
-  };
-
   return (
     <div className="fixed top-4 right-4 z-50 flex gap-2">
-      {showPlayButton && (
-        <button
-          onClick={handleManualStart}
-          className="bg-cyan-900/80 backdrop-blur-sm border border-cyan-500/50 p-3 rounded-lg hover:bg-cyan-800 transition-colors group shadow-lg animate-pulse"
-          title="Start Music"
-        >
-          <Play size={20} className="text-cyan-400 group-hover:text-cyan-300" />
-        </button>
-      )}
-      
       {isReady && (
         <button
           onClick={toggleMute}

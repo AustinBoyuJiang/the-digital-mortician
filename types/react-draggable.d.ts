@@ -1,6 +1,16 @@
 declare module 'react-draggable' {
   import * as React from 'react';
 
+  export interface DraggableData {
+    node: HTMLElement;
+    x: number;
+    y: number;
+    deltaX: number;
+    deltaY: number;
+    lastX: number;
+    lastY: number;
+  }
+
   export interface DraggableProps {
     axis?: 'both' | 'x' | 'y' | 'none';
     bounds?: string | { left?: number; top?: number; right?: number; bottom?: number } | false;
@@ -10,9 +20,9 @@ declare module 'react-draggable' {
     defaultPosition?: { x: number; y: number };
     position?: { x: number; y: number };
     scale?: number;
-    onStart?: (e: Event, data: any) => void | false;
-    onDrag?: (e: Event, data: any) => void | false;
-    onStop?: (e: Event, data: any) => void | false;
+    onStart?: (e: Event, data: DraggableData) => void | false;
+    onDrag?: (e: Event, data: DraggableData) => void | false;
+    onStop?: (e: Event, data: DraggableData) => void | false;
     disabled?: boolean;
     handle?: string;
     cancel?: string;

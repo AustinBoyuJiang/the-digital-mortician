@@ -28,6 +28,7 @@ export default function Home() {
     setGameStage,
     setGlitching,
     decryptAttempted,
+    ending,
   } = useGameStore();
 
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
@@ -39,7 +40,7 @@ export default function Home() {
   useEffect(() => {
     if (gameStage === 0) {
       setToastMessage(
-        "Welcome, Operator. You can view Personal_Photos or drag them to the Incinerator."
+        "Welcome, Operator. Open Personal_Photos to inspect the assigned file."
       );
       setToastFrom('System_Admin');
       setShowToast(true);
@@ -67,6 +68,12 @@ export default function Home() {
 
   const handleOpenPhotos = () => {
     openWindow('Personal_Photos');
+    if (gameStage === 0) {
+      setToastMessage('Inspection complete. Drag Personal_Photos to the Incinerator.');
+      setToastFrom('System_Admin');
+      setShowToast(true);
+      audioManager.playNotification();
+    }
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -88,7 +95,7 @@ export default function Home() {
       if (gameStage === 1) {
         setGameStage(2);
         setTimeout(() => {
-          setToastMessage('File locked. Check your Mail for clues or use Terminal to investigate.');
+          setToastMessage('File locked. Use Terminal to investigate, then check Mail for clues.');
           setToastFrom('System');
           setShowToast(true);
         }, 2000);
@@ -127,7 +134,7 @@ export default function Home() {
         transition={{ repeat: isGlitching ? Infinity : 0, duration: 0.3 }}
         className="w-full h-full"
       >
-        <div className="p-8 grid grid-cols-6 gap-6">
+        <div className="h-[calc(100vh-3.5rem)] box-border p-8 flex flex-col flex-wrap content-start items-start gap-6 overflow-hidden">
           <DesktopIcon
             icon={Mail}
             label="Mail"
@@ -155,12 +162,12 @@ export default function Home() {
             onDragStart={() => handleDragStart('Personal_Photos')}
             onClick={gameStage === 0 ? handleOpenPhotos : undefined}
           />
-          {gameStage >= 1 && gameStage < 3 && (
+          {gameStage >= 1 && gameStage < 4 && (
             <DesktopIcon
               icon={Folder}
               label="Q3_Financials"
-              draggable={true}
-              onDragStart={() => handleDragStart('Q3_Financials')}
+              draggable={gameStage < 3}
+              onDragStart={gameStage < 3 ? () => handleDragStart('Q3_Financials') : undefined}
             />
           )}
           {gameStage >= 3 && (
@@ -219,7 +226,7 @@ export default function Home() {
         <Toast
           message={toastMessage}
           from={toastFrom}
-          show={showToast}
+          show={showToast && gameStage !== 4 && !ending}
           onClose={() => setShowToast(false)}
         />
 

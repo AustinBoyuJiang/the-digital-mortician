@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -12,13 +11,6 @@ interface ToastProps {
 }
 
 export default function Toast({ message, from, show, onClose }: ToastProps) {
-  useEffect(() => {
-    if (show) {
-      const timer = setTimeout(onClose, 8000);
-      return () => clearTimeout(timer);
-    }
-  }, [show, onClose]);
-
   return (
     <AnimatePresence>
       {show && (
@@ -26,7 +18,7 @@ export default function Toast({ message, from, show, onClose }: ToastProps) {
           initial={{ opacity: 0, y: -20, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -20, scale: 0.9 }}
-          className="fixed top-20 right-4 bg-zinc-900/95 backdrop-blur-md border border-cyan-500/50 rounded-lg shadow-2xl p-4 max-w-md z-40 window-glow"
+          className="fixed top-20 right-4 bg-zinc-900/95 backdrop-blur-md border border-cyan-500/50 rounded-lg shadow-2xl p-4 max-w-md z-[500] window-glow"
         >
           <div className="flex items-start justify-between">
             <div>
