@@ -69,7 +69,7 @@ export default function Home() {
   const handleOpenPhotos = () => {
     openWindow('Personal_Photos');
     if (gameStage === 0) {
-      setToastMessage('Inspection complete. Drag Personal_Photos to the Incinerator.');
+      setToastMessage('Inspection complete. Drag the Personal_Photos folder to the Incinerator.');
       setToastFrom('System_Admin');
       setShowToast(true);
       audioManager.playNotification();

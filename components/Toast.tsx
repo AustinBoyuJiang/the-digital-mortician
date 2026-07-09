@@ -15,10 +15,17 @@ export default function Toast({ message, from, show, onClose }: ToastProps) {
     <AnimatePresence>
       {show && (
         <motion.div
-          initial={{ opacity: 0, y: -20, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
+          key={`${from}-${message}`}
+          initial={{ opacity: 0, y: -28, scale: 0.88 }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            scale: [1.08, 1],
+            x: [0, -6, 6, -3, 3, 0],
+          }}
           exit={{ opacity: 0, y: -20, scale: 0.9 }}
-          className="fixed top-20 right-4 bg-zinc-900/95 backdrop-blur-md border border-cyan-500/50 rounded-lg shadow-2xl p-4 max-w-md z-[500] window-glow"
+          transition={{ duration: 0.42, ease: 'easeOut' }}
+          className="fixed top-20 right-4 bg-zinc-900/95 backdrop-blur-md border-2 border-cyan-300 rounded-lg shadow-2xl shadow-cyan-400/30 ring-4 ring-cyan-300/25 p-4 max-w-md z-[500] window-glow"
         >
           <div className="flex items-start justify-between">
             <div>
